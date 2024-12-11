@@ -115,6 +115,7 @@
                             <hr class="d-lg-none">
                             <h4 class="mb-4">Nama : {{ auth()->user()->name }}</h4>
                             <h4 class="mb-4">Email : {{ auth()->user()->email }}</h4>
+                            <h4 class="mb-4">No Hp : {{ auth()->user()->no_hp }}</h4>
                             <h4 class="mb-4">Jenis Kelamin : {{ auth()->user()->gender }}</h4>
                             <h4 class="mb-4">Alamat : {{ auth()->user()->address }}</h4>
                             <h4 class="mb-4">Agama : {{ auth()->user()->religion }}</h4>

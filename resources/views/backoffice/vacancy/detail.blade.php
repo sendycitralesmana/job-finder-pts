@@ -182,10 +182,12 @@
                       </button>
                     </td>
                     <td>
+                      @if ($jobApplication->cv)
                       <a href="/backoffice/user/{{ $jobApplication->user_id }}/preview-cv" target="_blank"
                         class="btn btn-primary">
                         <span class="fa fa-file-pdf"></span> Lihat
                       </a>
+                      @endif
                     </td>
                     <td>
                       @if ($jobApplication->status == 'pending')
