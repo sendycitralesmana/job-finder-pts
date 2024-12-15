@@ -4,7 +4,7 @@
             <form role="form" method="POST" action="/backoffice/vacancy/{{ $vacancy->id }}/skill/create" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Tambah Skill</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Tambah Kualifikasi Skill</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -19,7 +19,7 @@
 
                                     <div id="formInputSkill">
                                         <div class="form-group">
-                                            <label for="skill[]">Skill </label>
+                                            <label for="skill[]">Kualifikasi Skill </label>
                                             <div class="d-flex justify-content-between">
                                             <input type="text" name="skill[]" placeholder="Skill"
                                                 class="form-control @if ($errors->has('skill')) is-invalid @endif"

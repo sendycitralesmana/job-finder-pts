@@ -22,13 +22,8 @@
   <div class="row justify-content-center">
     <div class="col-md-12">
 
-      <!-- Default box -->
       <div class="card card-outline card-primary">
         <div class="card-header">
-
-          {{-- <div class="row">
-            <h3 class="card-title">Pengguna</h3>
-          </div> --}}
 
           <div class="row flex justify-content-between mt-2">
             <form action="" class="form-inline">
@@ -144,11 +139,13 @@
                       <a href="/backoffice/vacancy/{{ $vacancy->id }}/detail" class="btn btn-tool btn-sm">
                         <span class="fa fa-eye"></span>
                       </a>
-                      {{-- <button title="delete" type="button" class="btn btn-tool btn-sm" data-toggle="modal"
-                        data-target="#delete-{{ $vacancy->id }}">
-                        <span class="fa fa-trash"></span>
-                      </button>
-                      @include('backoffice.vacancy.modal.delete') --}}
+                      @if ($vacancy->jobApplications->count() == 0)
+                        <button title="delete" type="button" class="btn btn-tool btn-sm" data-toggle="modal"
+                          data-target="#delete-{{ $vacancy->id }}">
+                          <span class="fa fa-trash"></span>
+                        </button>
+                        @include('backoffice.vacancy.modal.delete')
+                      @endif
                       <button type="button" class="btn btn-tool btn-sm" data-card-widget="collapse" data-toggle="tooltip"
                         title="Collapse">
                         <i class="fas fa-minus"></i>
@@ -198,7 +195,32 @@
                     </div>
                   </div>
                   <div class="card-footer">
-                    Lowongan kerja diminati {{ $vacancy->jobApplications->count() }} pelamar
+                    <div class="d-flex justify-content-around">
+                      <div class="btn btn-primary btn-sm">
+                        <i class="fas fa-user-friends"></i>
+                        {{ $vacancy->jobApplications->count() }} pelamar
+                      </div>
+                      <div>
+                        <button title="jadwal interview" type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                          data-target="#schedule-interview-{{ $vacancy->id }}">
+                          <span class="fa fa-calendar-alt"></span> Jadwal Interview
+                        </button>
+                        @include('backoffice.vacancy.modal.schedule-interview')
+                        {{-- <a href="/backoffice/vacancy/{{ $vacancy->id }}/schedule" class="btn btn-primary btn-sm">
+                          <i class="fas fa-calendar-alt"></i> Jadwal Interview
+                        </a> --}}
+                      </div>
+                      <div>
+                        <button title="jadwal training" type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                          data-target="#schedule-training-{{ $vacancy->id }}">
+                          <span class="fa fa-calendar-alt"></span> Jadwal Training
+                        </button>
+                        @include('backoffice.vacancy.modal.schedule-training')
+                        {{-- <a href="/backoffice/vacancy/{{ $vacancy->id }}/schedule" class="btn btn-primary btn-sm">
+                          <i class="fas fa-calendar-alt"></i> Jadwal Training
+                        </a> --}}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -210,6 +232,14 @@
 
       </div>
 
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="d-flex justify-content-end">
+        {{ $vacancies->links() }}
+      </div>
     </div>
   </div>
 

@@ -6,6 +6,7 @@ use App\Http\Repository\OfficeRepository;
 use App\Http\Repository\RoleRepository;
 use App\Http\Repository\UserRepository;
 use App\Http\Requests\User\CreateRequest;
+use App\Models\JobApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -136,6 +137,18 @@ class UserController extends Controller
             $user = $this->userRepository->getById($id);
             $file = Storage::disk('public')->get($user->cv);
             $filename = $user->name . '-cv.pdf';
+            return response($file)->header('Content-Type', 'application/pdf')->header('Content-Disposition', 'inline; filename="' . $filename . '"');
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function previewApplicationLetter($id)
+    {
+        try {
+            $jobApplication = JobApplication::find($id);
+            $file = Storage::disk('public')->get($jobApplication->application_letter);
+            $filename = $jobApplication->user->name . '-application-letter.pdf';
             return response($file)->header('Content-Type', 'application/pdf')->header('Content-Disposition', 'inline; filename="' . $filename . '"');
         } catch (\Throwable $th) {
             throw $th;

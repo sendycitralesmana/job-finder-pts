@@ -4,9 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Vacancy extends Model
 {
+    public function interviewSchedule(): HasOne
+    {
+        return $this->hasOne(InterviewSchedule::class, 'vacancy_id', 'id');
+    }
+
+    public function trainingSchedule(): HasOne
+    {
+        return $this->hasOne(TrainingSchedule::class, 'vacancy_id', 'id');
+    }
     
     public function users(): HasMany
     {

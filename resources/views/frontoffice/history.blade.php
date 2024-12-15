@@ -122,29 +122,31 @@
                         @foreach ($histories as $history)
                             <!-- single-job-content -->
                             <div class="single-job-items mb-30">
-                                <div class="job-items">
-                                    <div class="company-img">
-                                        <a href="/job/{{ $history->vacancy->id }}/detail"><img src="{{ Storage::disk('local')->url($office->image) }}" class="img-fluid" style="height: 100px" alt=""></a>
+                                <div class="d-flex justify-content-between" style="width: 100%">
+                                    <div class="job-items">
+                                        <div class="company-img">
+                                            <a href="/job/{{ $history->vacancy->id }}/detail"><img src="{{ Storage::disk('local')->url($office->image) }}" class="img-fluid" style="height: 100px" alt=""></a>
+                                        </div>
+                                        <div class="job-tittle job-tittle2">
+                                            <a href="/job/{{ $history->vacancy->id }}/detail">
+                                                <h4 style="
+                                                        white-space: nowrap;
+                                                        overflow: hidden;
+                                                        text-overflow: ellipsis;
+                                                        max-width: 35ch;">
+                                                    {{ $history->vacancy->name }}
+                                                </h4>
+                                            </a>
+                                            <ul>
+                                                <li>{{ $office->name }}</li>
+                                                <li>Rp. {{ number_format($history->vacancy->start_salary) }} - Rp. {{ number_format($history->vacancy->end_salary) }}</li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                    <div class="job-tittle job-tittle2">
-                                        <a href="/job/{{ $history->vacancy->id }}/detail">
-                                            <h4 style="
-                                                    white-space: nowrap;
-                                                    overflow: hidden;
-                                                    text-overflow: ellipsis;
-                                                    max-width: 35ch;">
-                                                {{ $history->vacancy->name }}
-                                            </h4>
-                                        </a>
-                                        <ul>
-                                            <li>{{ $office->name }}</li>
-                                            <li>Rp. {{ number_format($history->vacancy->start_salary) }} - Rp. {{ number_format($history->vacancy->end_salary) }}</li>
-                                        </ul>
+                                    <div class="items-link items-link2 f-right">
+                                        <a href="/job/{{ $history->vacancy->id }}/detail">{{ $history->vacancy->type }}</a>
+                                        <span>{{ \Carbon\Carbon::parse($history->vacancy->created_at)->locale('id')->diffForHumans() }}</span>
                                     </div>
-                                </div>
-                                <div class="items-link items-link2 f-right">
-                                    <a href="/job/{{ $history->vacancy->id }}/detail">{{ $history->vacancy->type }}</a>
-                                    <span>{{ \Carbon\Carbon::parse($history->vacancy->created_at)->locale('id')->diffForHumans() }}</span>
                                 </div>
                                 <hr>
                                 <div class="job-post-details">
@@ -152,11 +154,17 @@
                                         <p>Apply date : <span>{{ $history->created_at }}</span></p>
                                     </div>
                                     <div class="post-details2">
-                                        <p>Apply status : <span class="badge badge-warning px-5 py-2">
-                                            @if ($history->status == 'pending')
-                                                <span class="fa fa-spinner fa-spin"></span> PENDING
+                                        <p>Apply status : 
+                                            @if ($history->status == 'lulus kualifikasi')
+                                                <span class="badge badge-success px-5 py-2">
+                                                    <span class="fa fa-check"></span> {{ strtoupper($history->status) }}
+                                                </span>
+                                            @elseif ($history->status != 'pending')
+                                                <span class="badge badge-warning px-5 py-2">
+                                                    <span class="fa fa-spinner fa-spin"></span> {{ strtoupper($history->status) }}
+                                                </span>
                                             @endif
-                                        </span></p>
+                                        </p>
                                     </div>
                                 </div>
                             </div>

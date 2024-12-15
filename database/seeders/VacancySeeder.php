@@ -22,12 +22,12 @@ class VacancySeeder extends Seeder
                 'end_salary' => 6000000,
                 'type' => 'full time',
                 'status' => 'aktif',
+                'score_document' => 'aktif',
+                'score_interview' => 'aktif',
+                'score_training' => 'aktif',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                
-            ]
         ]);
     }
 }

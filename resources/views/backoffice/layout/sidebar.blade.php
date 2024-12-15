@@ -75,15 +75,33 @@
                             </p>
                         </a>
                     </li>
-                    {{-- <li class="nav-item">
-                        <a href="/backoffice/schedule"
-                            class="nav-link {{ request()->is('backoffice/schedule', 'backoffice/schedule/*') ? 'active' : '' }}">
-                            <i class="nav-icon fa fa-clock"></i>
+                    <li class="nav-item">
+                        <a href="/backoffice/interview"
+                            class="nav-link {{ request()->is('backoffice/interview', 'backoffice/interview/*') ? 'active' : '' }}">
+                            <i class="nav-icon fa fa-chalkboard-teacher"></i>
                             <p>
                                 Jadwal Interview
                             </p>
                         </a>
-                    </li> --}}
+                    </li>
+                    <li class="nav-item">
+                        <a href="/backoffice/training"
+                            class="nav-link {{ request()->is('backoffice/training', 'backoffice/training/*') ? 'active' : '' }}">
+                            <i class="nav-icon fa fa-chalkboard-teacher"></i>
+                            <p>
+                                Jadwal Training
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/backoffice/qualification"
+                            class="nav-link {{ request()->is('backoffice/qualification', 'backoffice/qualification/*') ? 'active' : '' }}">
+                            <i class="nav-icon fa fa-user-check"></i>
+                            <p>
+                                Kandidat Lulus
+                            </p>
+                        </a>
+                    </li>
 
                     {{-- <li class="nav-item has-treeview {{ request()->is('backoffice/user-data/*') ? 'menu-open' : '' }}">
                         <a href="#" class="nav-link {{ request()->is('backoffice/user-data/*') ? 'active' : '' }}">

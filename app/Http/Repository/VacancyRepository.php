@@ -31,7 +31,7 @@ class VacancyRepository
                 $vacancies->where('type', $request->type);
             }
 
-            return $vacancies->paginate(6);
+            return $vacancies->orderBy('created_at', 'desc')->paginate(9);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -60,6 +60,9 @@ class VacancyRepository
             $vacancy->end_date = $request->end_date;
             $vacancy->status = "aktif";
             $vacancy->type = $request->type;
+            $vacancy->score_document = 'aktif';
+            $vacancy->score_interview = 'aktif';
+            $vacancy->score_training = 'aktif';
             $vacancy->save();
 
             foreach ($request->skill as $key => $skill) {

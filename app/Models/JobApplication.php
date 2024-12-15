@@ -4,12 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class JobApplication extends Model
 {
     public function vacancy(): BelongsTo
     {
         return $this->belongsTo(Vacancy::class, 'vacancy_id', 'id');
+    }
+
+    public function interviews(): HasMany
+    {
+        return $this->hasMany(Interview::class, 'job_application_id', 'id');
     }
 
     public function user(): BelongsTo

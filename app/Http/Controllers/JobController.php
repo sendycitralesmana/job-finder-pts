@@ -7,6 +7,7 @@ use App\Models\Office;
 use App\Models\Vacancy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class JobController extends Controller
 {
@@ -38,21 +39,53 @@ class JobController extends Controller
 
     public function detail($id)
     {
+        // $jobApplication = JobApplication::where('vacancy_id', $id)->first();
+
         $vacancy = Vacancy::findOrFail($id);
         $office = Office::first();
 
         return view('frontoffice.job-detail', compact('vacancy', 'office'));
     }
 
-    public function apply($id)
+    public function apply(Request $request, $id)
     {
         $vacancy = Vacancy::findOrFail($id);
         $jobApplication = new JobApplication();
         $jobApplication->vacancy_id = $vacancy->id;
         $jobApplication->user_id = Auth::user()->id;
         $jobApplication->status = 'pending';
+        if ($request->file('application_letter')) {
+            $file = $request->file('application_letter');
+            $path = Storage::disk('public')->put('user/application-letter', $file);
+            $jobApplication->application_letter = $path;
+            $jobApplication->save();
+        }
         $jobApplication->save();
 
         return redirect()->back()->with('success', 'Apply lowongan telah dikirim');
+    }
+
+    public function applicationLetterPreview($id)
+    {
+        $jobApplication = JobApplication::find($id);
+        $file = Storage::disk('public')->get($jobApplication->application_letter);
+        $filename = $jobApplication->user->name . '-application-letter.pdf';
+        return response($file)->header('Content-Type', 'application/pdf')->header('Content-Disposition', 'inline; filename="' . $filename . '"');
+    }
+
+    public function applicationLetterUpdate(Request $request, $id)
+    {
+        $jobApplication = JobApplication::find($id);
+        if ($request->file('application_letter')) {
+            if ($jobApplication->application_letter) {
+                Storage::disk('public')->delete($jobApplication->application_letter);
+            }
+            $file = $request->file('application_letter');
+            $path = Storage::disk('public')->put('user/application-letter', $file);
+            $jobApplication->application_letter = $path;
+            $jobApplication->save();
+        }
+
+        return redirect()->back()->with('success', 'Surat lamaran sudah diubah');
     }
 }

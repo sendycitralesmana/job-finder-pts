@@ -5,11 +5,15 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InterviewController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\OfficeController;
+use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\SkillController;
+use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VacancyController;
+use App\Models\Vacancy;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -29,9 +33,11 @@ Route::middleware(['is-applicant'])->group(function () {
     // grup job
     Route::prefix('job')->group(function () {
         Route::get('/', [JobController::class, 'job']);
-    
+        
         // grup job_id
         Route::group(['prefix' => '{job_id}'], function () {
+            Route::get('/application-letter-preview', [JobController::class, 'applicationLetterPreview']);
+            Route::get('/application-letter-edit', [JobController::class, 'applicationLetterEdit']);
             Route::get('/detail', [JobController::class, 'detail']);
             Route::post('/apply', [JobController::class, 'apply']);
             Route::get('/delete', [JobController::class, 'delete']);
@@ -143,68 +149,121 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['is-admin'])->group(function () {
 
         // grup backoffice
-    Route::prefix('backoffice')->group(function () {
-    
-        // grup dashboard
-        Route::prefix('dashboard')->group(function () {
-            Route::get('/', [DashboardController::class, 'dashboard']);
-        });
-
-        // grup office
-        Route::prefix('office')->group(function () {
-            Route::get('/', [OfficeController::class, 'office']);
-            Route::put('/update', [OfficeController::class, 'update']);
-        });
-
-        // grup user
-        Route::group(['prefix' => 'user'], function () {
-            Route::get('/', [UserController::class, 'index']);
-            Route::post('/create', [UserController::class, 'create']);
-
-            // grup user_id
-            Route::group(['prefix' => '{user_id}'], function () {
-                Route::put('/update', [UserController::class, 'update']);
-                Route::put('/update-by-admin', [UserController::class, 'updateByAdmin']);
-                Route::get('/profile', [UserController::class, 'profile']);
-                Route::get('/edit-data', [UserController::class, 'editData']);
-                Route::get('/edit-password', [UserController::class, 'editPassword']);
-                Route::post('/update-data', [UserController::class, 'updateData']);
-                Route::post('/update-password', [UserController::class, 'updatePassword']);
-                Route::get('/delete', [UserController::class, 'delete']);
-                Route::get('/preview-cv', [UserController::class, 'previewCv']);
+        Route::prefix('backoffice')->group(function () {
+        
+            // grup dashboard
+            Route::prefix('dashboard')->group(function () {
+                Route::get('/', [DashboardController::class, 'dashboard']);
             });
 
-        });
+            // grup office
+            Route::prefix('office')->group(function () {
+                Route::get('/', [OfficeController::class, 'office']);
+                Route::put('/update', [OfficeController::class, 'update']);
+            });
 
-        // grup vacancy
-        Route::prefix('vacancy')->group(function () {
-            Route::get('/', [VacancyController::class, 'vacancy']);
-            Route::post('/create', [VacancyController::class, 'create']);
+            // grup user
+            Route::group(['prefix' => 'user'], function () {
+                Route::get('/', [UserController::class, 'index']);
+                Route::post('/create', [UserController::class, 'create']);
 
-            // grup vacancy_id
-            Route::group(['prefix' => '{vacancy_id}'], function () {
-                Route::put('/update', [VacancyController::class, 'update']);
-                Route::get('/delete', [VacancyController::class, 'delete']);
-                Route::get('/detail', [VacancyController::class, 'detail']);
+                // grup user_id
+                Route::group(['prefix' => '{user_id}'], function () {
+                    Route::put('/update', [UserController::class, 'update']);
+                    Route::put('/update-by-admin', [UserController::class, 'updateByAdmin']);
+                    Route::get('/profile', [UserController::class, 'profile']);
+                    Route::get('/edit-data', [UserController::class, 'editData']);
+                    Route::get('/edit-password', [UserController::class, 'editPassword']);
+                    Route::post('/update-data', [UserController::class, 'updateData']);
+                    Route::post('/update-password', [UserController::class, 'updatePassword']);
+                    Route::get('/delete', [UserController::class, 'delete']);
+                    Route::get('/preview-cv', [UserController::class, 'previewCv']);
+                });
 
-                // grup skill
-                Route::prefix('skill')->group(function () {
-                    Route::post('/create', [SkillController::class, 'create']);
+            });
+
+            // grup vacancy
+            Route::prefix('vacancy')->group(function () {
+                Route::get('/', [VacancyController::class, 'vacancy']);
+                Route::post('/create', [VacancyController::class, 'create']);
+
+                // grup vacancy_id
+                Route::group(['prefix' => '{vacancy_id}'], function () {
+                    Route::put('/update', [VacancyController::class, 'update']);
+                    Route::get('/delete', [VacancyController::class, 'delete']);
+                    Route::get('/detail', [VacancyController::class, 'detail']);
+                    Route::get('/document-aktif', [VacancyController::class, 'documentAktif']);
+                    Route::get('/document-nonaktif', [VacancyController::class, 'documentNonaktif']);
+                    Route::get('/interview-aktif', [VacancyController::class, 'interviewAktif']);
+                    Route::get('/interview-nonaktif', [VacancyController::class, 'interviewNonaktif']);
+                    Route::get('/training-aktif', [VacancyController::class, 'trainingAktif']);
+                    Route::get('/training-nonaktif', [VacancyController::class, 'trainingNonaktif']);
+                    Route::post('/schedule-interview', [VacancyController::class, 'scheduleInterview']);
+                    Route::post('/schedule-training', [VacancyController::class, 'scheduleTraining']);
+
+                    // grup skill
+                    Route::prefix('skill')->group(function () {
+                        Route::post('/create', [SkillController::class, 'create']);
+                    });
                 });
             });
-        });
 
-        // grup skill
-        Route::prefix('skill')->group(function () {
-
-            // grup skill_id
-            Route::group(['prefix' => '{skill_id}'], function () {
-                Route::put('/update', [SkillController::class, 'update']);
-                Route::get('/delete', [SkillController::class, 'delete']);
+            // grup job-application
+            Route::prefix('job-application')->group(function () {
+                
+                // grup job-application_id
+                Route::group(['prefix' => '{job_application_id}'], function () {
+                    Route::post('/score', [VacancyController::class, 'score']);
+                    Route::get('/preview-application-letter', [UserController::class, 'previewApplicationLetter']);
+                    Route::get('/invite-interview', [VacancyController::class, 'inviteInterview']);
+                });
             });
-        });
 
-    });
+            // grup skill
+            Route::prefix('skill')->group(function () {
+
+                // grup skill_id
+                Route::group(['prefix' => '{skill_id}'], function () {
+                    Route::put('/update', [SkillController::class, 'update']);
+                    Route::get('/delete', [SkillController::class, 'delete']);
+                });
+            });
+
+            // grup interview
+            Route::prefix('interview')->group(function () {
+                Route::get('/', [InterviewController::class, 'index']);
+
+                // grup interview_id
+                Route::group(['prefix' => '{interview_id}'], function () {
+                    Route::get('/detail', [InterviewController::class, 'detail']);
+                    Route::post('/score', [InterviewController::class, 'score']);
+                    Route::get('/invite-training', [InterviewController::class, 'inviteTraining']);
+                });
+            });
+
+            // grup training
+            Route::prefix('training')->group(function () {
+                Route::get('/', [TrainingController::class, 'index']);
+
+                // grup training_id
+                Route::group(['prefix' => '{training_id}'], function () {
+                    Route::get('/detail', [TrainingController::class, 'detail']);
+                    Route::post('/score', [TrainingController::class, 'score']);
+                    Route::get('/invite-qualification', [TrainingController::class, 'inviteQualification']);
+                });
+            });
+
+            // grup qualification
+            Route::prefix('qualification')->group(function () {
+                Route::get('/', [QualificationController::class, 'index']);
+
+                // grup qualification_id
+                Route::group(['prefix' => '{qualification_id}'], function () {
+                    Route::get('/detail', [QualificationController::class, 'detail']);
+                });
+            });
+
+        });
 
     });
 

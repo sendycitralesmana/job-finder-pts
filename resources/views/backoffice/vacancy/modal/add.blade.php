@@ -94,7 +94,7 @@
 
                                     <div id="formInputSkill">
                                         <div class="form-group">
-                                            <label for="skill[]">Skill </label>
+                                            <label for="skill[]">Kualifikasi Skill </label>
                                             <div class="d-flex justify-content-between">
                                                 <div>
                                                     <input type="text" name="skill[]" placeholder="Skill"

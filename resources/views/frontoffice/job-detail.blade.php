@@ -88,13 +88,24 @@
                                     Login for apply
                                 </button>
                             @else
-
                                 @if (auth()->user()->jobApplications->where('vacancy_id', $vacancy->id)->count() > 0)
                                     <button type="button" class="btn btn-default" disabled>
-                                        @if (auth()->user()->jobApplications->where('vacancy_id', $vacancy->id)->first()->status == 'pending')
-                                            <span class="fa fa-spinner fa-spin"></span> PENDING
+                                        @if (auth()->user()->jobApplications->where('vacancy_id', $vacancy->id)->first()->status == 'lulus kualifikasi')
+                                            <span class="fa fa-check"></span> {{ auth()->user()->jobApplications->where('vacancy_id', $vacancy->id)->first()->status }}
+                                        @else
+                                            <span class="fa fa-spinner fa-spin"></span> {{ auth()->user()->jobApplications->where('vacancy_id', $vacancy->id)->first()->status }}
                                         @endif
                                     </button>
+                                    {{-- <hr>
+                                    <div>
+                                        Surat Lamaran : 
+                                        <a href="/job/{{ $->id }}/application-letter-preview" class="badge badge-info mx-2 my-1" target="_blank">
+                                            <span class="fa fa-eye"></span> Lihat
+                                        </a>
+                                        <a href="/" class="badge badge-info mx-2 my-1" target="_blank">
+                                            <span class="fa fa-edit"></span> Ganti
+                                        </a>
+                                    </div> --}}
                                 @else
                                     <div type="button" class="btn" data-toggle="modal" data-target="#apply-job-{{ $vacancy->id }}">
                                         Apply Now
